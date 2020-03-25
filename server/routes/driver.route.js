@@ -1,24 +1,66 @@
 let mongoose = require('mongoose'),
   express = require('express'),
   router = express.Router();
+  jwt = require('jsonwebtoken');
+  bcrypt = require('bcrypt');
+  saltRounds = 20;
+
+  id = 100;
+  id++;
 
 // driver Model
 let driverSchema = require('../models/Driver');
 
 // CREATE Drivers
-router.route('/drivers').post((req, res, next) => {
-  driverSchema.create(req.body, (error, data) => {
+router.post(`/${id}`, async (req, res, next) => {
+  await driverSchema.create(req.body, async (error, data) => {
     if (error) {
       return next(error)
     } else {
       console.log(data)
-      res.json(data)
+      
+      // to hash pass
+      const salt = await bcrypt.genSalt(20);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+      const driver = new driverSchema({
+          name: req.body.name,
+          email: req.body.email,
+          tel: req.body.tel,
+          password: hashedPassword,
+          type: req.body.type,
+      });
+      try {
+          const savedDriver = driver.save();
+          res.send({driver: driver._id});
+      }catch(err){
+          res.status(400).send(err);
+      }
     }
   })
 });
 
+
+router.post(`/${id}/login`, async (req, res) => {
+
+  const driver = await driverSchema.findOne({email: req.body.email});
+    if(!driver) {
+      return res.status(400).send("There is no user such email.");
+    }
+
+  const validPass = await bcrypt.compare(req.body.password, driver.password);
+    if(!validPass) {
+      return res.status(400).send("Wrong password!");
+    }
+
+  // token
+  const token = jwt.sign({_id: driver._id}, process.env.TOKEN_SECRET);
+  res.header('authorization', token).send(token);
+});
+
+
 // READ Drivers
-router.route('/drivers').get((req, res) => {
+router.route('/').get((req, res) => {
   driverSchema.find((error, data) => {
     if (error) {
       return next(error)
@@ -29,7 +71,7 @@ router.route('/drivers').get((req, res) => {
 })
 
 // Get Single driver
-router.route('/driver/:id').get((req, res) => {
+router.route('/:id').get((req, res) => {
   driverSchema.findById(req.params.id, (error, data) => {
     if (error) {
       return next(error)
@@ -41,7 +83,7 @@ router.route('/driver/:id').get((req, res) => {
 
 
 // Update driver
-router.route('/driver/:id').put((req, res, next) => {
+router.route('/:id').put((req, res, next) => {
   driverSchema.findByIdAndUpdate(req.params.id, {
     $set: req.body
   }, (error, data) => {
@@ -56,7 +98,7 @@ router.route('/driver/:id').put((req, res, next) => {
 })
 
 // Delete driver
-router.route('/driver/:id').delete((req, res, next) => {
+router.route('/:id').delete((req, res, next) => {
   driverSchema.findByIdAndRemove(req.params.id, (error, data) => {
     if (error) {
       return next(error);

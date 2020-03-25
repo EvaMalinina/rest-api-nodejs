@@ -9,10 +9,13 @@ let driverSchema = new Schema({
     type: String
   },
   tel: {
-    type: String
+    type: Number
   },
   password: {
     type: Number
+  },
+  type: {
+    type: String
   }
 }, {
     collection: 'drivers'

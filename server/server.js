@@ -3,16 +3,17 @@ let mongoose = require('mongoose');
 let cors = require('cors');
 let bodyParser = require('body-parser');
 // let dbConfig = require('./database/db');
-let config = require('config');
-config.get(`db`);
+let dbConfig = require('config');
+let db = dbConfig.get('db');
 
 // Express Route
 const driverRoute = require('../server/routes/driver.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
-mongoose.connect(dbConfig.db, {
-  useNewUrlParser: true
+mongoose.connect(db, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true 
 }).then(() => {
   console.log('Database sucessfully connected!')
 },
@@ -22,13 +23,14 @@ mongoose.connect(dbConfig.db, {
 )
 
 const app = express();
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(cors());
-app.use('/drivers', driverRoute)
 
+app.use('/drivers', driverRoute)
 
 // PORT
 const port = process.env.PORT || 4000;
