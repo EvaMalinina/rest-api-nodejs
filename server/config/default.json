@@ -1,0 +1,16 @@
+{
+  "db": "mongodb://localhost:27017/appdb",
+  "Driver": {
+    "dbConfig": {
+      "host": "localhost",
+      "port": 5984,
+      "dbName": "drivers"
+    },
+    "credit": {
+      "initialLimit": 100,
+      "initialDays": 1
+    }
+  }
+}
+
+

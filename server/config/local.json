@@ -1,0 +1,14 @@
+{
+  "db": "http://localhost:4000/appdb",
+  "Driver": {
+    "dbConfig": {
+      "host": "localhost",
+      "port": 5984,
+      "dbName": "drivers"
+    },
+    "credit": {
+      "initialLimit": 100,
+      "initialDays": 1
+    }
+  }
+}
