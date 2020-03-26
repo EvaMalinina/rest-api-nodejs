@@ -13,7 +13,7 @@ export default class CreateDriver extends Component {
     this.onChangeDriverEmail = this.onChangeDriverEmail.bind(this);
     this.onChangeDriverTel = this.onChangeDriverTel.bind(this);
     this.onChangeDriverPassword = this.onChangeDriverPassword.bind(this);
-    this.onChangeDriverType = this.onChangeDriverType.bind(this);
+    this.onChangeDriverRole = this.onChangeDriverRole.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     // Setting up state
@@ -22,7 +22,7 @@ export default class CreateDriver extends Component {
       email: '',
       tel: '',
       password: '',
-      type: ''
+      role: 'Driver'
     }
   }
 
@@ -42,35 +42,38 @@ export default class CreateDriver extends Component {
     this.setState({password: e.target.value})
   }
 
-  onChangeDriverType(e) {
-    this.setState({type: e.target.value})
+  onChangeDriverRole(e) {
+    this.setState({role: e.target.value})
   }
 
   onSubmit(e) {
     e.preventDefault()
-
-    let id = 100;
-    id++;
 
     const driverObj = {
       name: this.state.name,
       email: this.state.email,
       tel: this.state.tel,
       password: this.state.password,
-      type: this.state.type
+      role: this.state.role
     };
 
-    axios.post(`http://localhost:4000/drivers/${id}`, driverObj)
-      .then(res => console.log(res.data));
+    axios.post(`http://localhost:4000/api/drivers/`, driverObj)
+      // .then(res => console.log(res.data));
+      .then(function (res) {
+       console.log(res.data);
+     })
+     .catch(function (error) {
+       console.log("There is a problem with registration", error);
+     })
      
-    this.setState({name: '', email: '', tel: '', password: '', type: ''})
+    this.setState({name: '', email: '', tel: '', password: '', role: ''})
 
     console.log(`User successfully created!`);
     console.log(`Name: ${this.state.name}`);
     console.log(`Email: ${this.state.email}`);
     console.log(`Tel: ${this.state.tel}`);
     console.log(`Password: ${this.state.password}`);
-    console.log(`Type: ${this.state.type}`);
+    console.log(`Role: ${this.state.role}`);
 
     // Redirect to Login 
     this.props.history.push('/login');
@@ -102,9 +105,9 @@ export default class CreateDriver extends Component {
 
         <Form.Group controlId="Role">
           <Form.Label>Choose your role</Form.Label>
-          <Form.Control as="select">
-            <option>Driver</option>
-            <option>Shipper</option>
+          <Form.Control as="select" value={this.state.role} onChange={this.onChangeDriverRole}>
+            <option value="driver">Driver</option>
+            <option value="shipper">Shipper</option>
           </Form.Control>
         </Form.Group>
 

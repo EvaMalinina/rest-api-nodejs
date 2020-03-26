@@ -31,17 +31,21 @@ export default class LoginDriver extends Component {
   onSubmit(e) {
     e.preventDefault()
 
-    let id = 100;
-    id++;
-
     const driverObj = {
       email: this.state.email,
       password: this.state.password
     };
 
-    axios.post(`http://localhost:4000/drivers/${id}/login`, driverObj)
-      .then(res => console.log(res.data));
-     
+    axios.post('http://localhost:4000/api/drivers/login', driverObj)
+      // .then(res => console.log(res))
+      .then(function (res) {
+        // console.log(res.data);
+        localStorage.setItem('token', res.data);
+      })
+      .catch(function (error) {
+        console.log("There is problem with login", error);
+      })
+
     this.setState({email: '', password: ''})
 
     console.log(`User successfully logged!`);

@@ -15,6 +15,7 @@ import LoginDriver from "./components/login-driver.component";
 import Profile from "./components/profile.component";
 
 function App() {
+    
   return (
   <Router>
     <div className="App">
@@ -30,7 +31,7 @@ function App() {
 
             <Nav className="justify-content-end">
               <Nav>
-                <Link to={"/drivers/:id"} className="nav-link">
+                <Link to={"/"} className="nav-link">
                   Create Account
                 </Link>
               </Nav>

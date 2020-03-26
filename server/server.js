@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/drivers', driverRoute)
+app.use('/api/drivers', driverRoute)
 
 // PORT
 const port = process.env.PORT || 4000;

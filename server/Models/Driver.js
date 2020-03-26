@@ -12,9 +12,9 @@ let driverSchema = new Schema({
     type: Number
   },
   password: {
-    type: Number
+    type: String
   },
-  type: {
+  role: {
     type: String
   }
 }, {

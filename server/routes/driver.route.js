@@ -1,66 +1,64 @@
+require('dotenv').config();
+
 let mongoose = require('mongoose'),
   express = require('express'),
   router = express.Router();
   jwt = require('jsonwebtoken');
   bcrypt = require('bcrypt');
-  saltRounds = 20;
-
-  id = 100;
-  id++;
+  saltRounds = 9;
+  withAuth = require('../middleware');
 
 // driver Model
 let driverSchema = require('../models/Driver');
 
 // CREATE Drivers
-router.post(`/${id}`, async (req, res, next) => {
-  await driverSchema.create(req.body, async (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      console.log(data)
+router.post('/', async (req, res, next) => {
       
-      // to hash pass
-      const salt = await bcrypt.genSalt(20);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    // to hash pass
+    const salt = await bcrypt.genSalt(9);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-      const driver = new driverSchema({
-          name: req.body.name,
-          email: req.body.email,
-          tel: req.body.tel,
-          password: hashedPassword,
-          type: req.body.type,
-      });
-      try {
-          const savedDriver = driver.save();
-          res.send({driver: driver._id});
-      }catch(err){
-          res.status(400).send(err);
-      }
+    const driver = new driverSchema({
+        name: req.body.name,
+        email: req.body.email,
+        tel: req.body.tel,
+        password: hashedPassword,
+        role: req.body.role
+    });
+    try {
+        const savedDriver = driver.save();
+        res.send({driver: driver._id});
+    }catch(err){
+        res.status(500).send(err);
     }
-  })
 });
 
-
-router.post(`/${id}/login`, async (req, res) => {
+// LOGIN Drivers
+router.post('/login', async (req, res) => {
 
   const driver = await driverSchema.findOne({email: req.body.email});
-    if(!driver) {
-      return res.status(400).send("There is no user such email.");
+ 
+  if ( driver == null ) {
+    return res.status(400).send("Cannot find a user.")
+  }
+  try {
+    if(await bcrypt.compare(req.body.password, driver.password)) {
+      // res.send("You are logged in.")
+      // token
+      const accessToken = jwt.sign({_id: driver._id}, process.env.ACCESS_TOKEN_SECRET);
+      // res.send({ accessToken: accessToken });
+      res.header('authorization', accessToken).send(accessToken);
+    } else {
+      res.send("Credentials are not correct.")
     }
-
-  const validPass = await bcrypt.compare(req.body.password, driver.password);
-    if(!validPass) {
-      return res.status(400).send("Wrong password!");
-    }
-
-  // token
-  const token = jwt.sign({_id: driver._id}, process.env.TOKEN_SECRET);
-  res.header('authorization', token).send(token);
+  } catch {
+    res.status(500).send();
+  }
 });
 
 
 // READ Drivers
-router.route('/').get((req, res) => {
+router.get('/', (req, res) => {
   driverSchema.find((error, data) => {
     if (error) {
       return next(error)
@@ -71,14 +69,13 @@ router.route('/').get((req, res) => {
 })
 
 // Get Single driver
-router.route('/:id').get((req, res) => {
-  driverSchema.findById(req.params.id, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
+router.get('/:id', withAuth, (req, res) => {
+  // res.send(drivers.filter(driver => driver.email = req.driver.email));
+  const driver = driverSchema.findOne({email: req.body.email});
+  if (req.body.email = driver.email) {
+    res.send(driver);
+  };
+ 
 })
 
 
