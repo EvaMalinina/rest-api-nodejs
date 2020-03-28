@@ -16,7 +16,7 @@ export default class LoginUser extends Component {
     // Setting up state
     this.state = {
       email: '',
-      password: '',
+      password: ''
     }
   }
 
@@ -47,19 +47,22 @@ export default class LoginUser extends Component {
       })
 
     this.setState({email: '', password: ''})
+    this.props.handleLoginClick();
 
     console.log(`User successfully logged!`);
     console.log(`Email: ${this.state.email}`);
     console.log(`Password: ${this.state.password}`);
+    console.log(`logged: ${this.state.isLoggedIn}`);
 
     // Redirect to Login 
     this.props.history.push('/profile');
   }
 
   render() {
+    const isLoggedIn = this.props.isLoggedIn;
     return (
     <div className="form-wrapper">
-      <Form onSubmit={ this.onSubmit }>
+      <Form onSubmit={ this.onSubmit } isLoggedIn={isLoggedIn}>
 
         <Form.Group controlId="Email">
           <Form.Label>Email</Form.Label>

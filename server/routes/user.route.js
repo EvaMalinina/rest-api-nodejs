@@ -37,13 +37,11 @@ router.post('/', async (req, res, next) => {
 router.post('/login', async (req, res) => {
 
   const user = await userSchema.findOne({email: req.body.email});
- 
   if ( user == null ) {
     return res.status(400).send("Cannot find a user.")
   }
   try {
     if(await bcrypt.compare(req.body.password, user.password)) {
-
       // token
       const accessToken = jwt.sign({_id: user._id}, process.env.ACCESS_TOKEN_SECRET);
       // res.send({ accessToken: accessToken });
@@ -82,21 +80,16 @@ router.get('/:id', (req, res) => {
 
 // UPDATE user password
 router.put('/:id', (req, res, next) => {
-  userSchema.findById(req.params.id, (err, userSchema) => {
+  userSchema.findById(req.params.id, async (err, userSchema) => {
     
     if (!userSchema) {
       res.status(404).send("data is not found");
     }
-    // const salt2 = bcrypt.genSalt(9);
-    userSchema.password = req.body.password;
-    // userSchema.password =  bcrypt.hash(userSchema.password, salt2);
+    const salt = await bcrypt.genSalt(9);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
     
-    // userSchema.save().then(userSchema => {
-    //   res.json('userSchema updated!');
-    // })
-    // .catch(err => {
-    //     res.status(400).send("Update not possible");
-    // });
+    userSchema.password = hashedPassword;
+
     try {
       const saveduser = userSchema.save();
       res.json('userSchema updated!');
@@ -105,7 +98,8 @@ router.put('/:id', (req, res, next) => {
       res.status(500).send(err);
     }
   })
-})
+});
+
 
 // DELETE user
 router.delete('/:id', (req, res, next) => {

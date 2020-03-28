@@ -6,7 +6,8 @@ let dbConfig = require('config');
 let db = dbConfig.get('db');
 
 // Express Route
-const driverRoute = require('./routes/user.route');
+const userRoute = require('./routes/user.route');
+const driverRoute = require('./routes/driver.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -29,7 +30,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/api/users', driverRoute)
+app.use('/api/users', userRoute);
+app.use('/api/driver', driverRoute);
 
 // PORT
 const port = process.env.PORT || 4000;

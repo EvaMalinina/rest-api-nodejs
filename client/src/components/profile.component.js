@@ -23,14 +23,6 @@ export default class Profile extends Component {
 
   componentDidMount() {
     axios.get('http://localhost:4000/users/:id')
-    
-    //  .then(res => {
-    //     let pass = localStorage.getItem('token', res.data)
-
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
       .then(res => {
         
         this.setState({
@@ -52,7 +44,6 @@ export default class Profile extends Component {
 
   onSubmit(e) {
     e.preventDefault()
-
     // let id = 100;
     // id++;
 
@@ -65,8 +56,10 @@ export default class Profile extends Component {
     };
 
     axios.put('http://localhost:4000/users/:id', userObj)
+     
       .then((res) => {
         console.log(res.data)
+        
         console.log('user successfully updated')
       })
       .catch(err => console.log("SERVER ERROR TO CLIENT:", err))
