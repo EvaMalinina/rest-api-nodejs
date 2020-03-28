@@ -9,13 +9,15 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import CreateDriver from "./components/create-driver.component";
-import EditDriver from "./components/edit-driver.component";
-import LoginDriver from "./components/login-driver.component";
+import CreateUser from "./components/create-user.component";
+import EditUser from "./components/edit-user.component";
+import LoginUser from "./components/login-user.component";
 import Profile from "./components/profile.component";
+import LoginControl from "./ui/login-control";
+
 
 function App() {
-    
+
   return (
   <Router>
     <div className="App">
@@ -37,20 +39,16 @@ function App() {
               </Nav>
 
               {/* <Nav>
-                <Link to={"/edit-student/:id"} className="nav-link">
-                  Edit Student
+                <Link to={"/login"} className="nav-link">
+                  Sign in
                 </Link>
+               
               </Nav> */}
-
-              <Nav>
-                <Link to={"/drivers"} className="nav-link">
-                  Accounts List
-                </Link>
-              </Nav>
             </Nav>
-
+           
           </Container>
         </Navbar>
+        <LoginControl/>
       </header>
 
       <Container>
@@ -58,10 +56,10 @@ function App() {
           <Col md={12}>
             <div className="wrapper">
               <Switch>
-                <Route exact path='/' component={CreateDriver} />
-                <Route path="/drivers" component={CreateDriver} />
-                <Route path="/drivers/:id" component={EditDriver} />
-                <Route path="/login" component={LoginDriver} />
+                <Route exact path='/' component={CreateUser} />
+                <Route path="/users" component={CreateUser} />
+                <Route path="/users/:id" component={EditUser} />
+                <Route path="/login" component={LoginUser} />
                 <Route path="/profile" component={Profile} />
               </Switch>
             </div>

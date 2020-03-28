@@ -57,7 +57,7 @@ export default class CreateDriver extends Component {
       role: this.state.role
     };
 
-    axios.post(`http://localhost:4000/api/drivers/`, driverObj)
+    axios.post(`http://localhost:4000/api/users/`, driverObj)
       // .then(res => console.log(res.data));
       .then(function (res) {
        console.log(res.data);

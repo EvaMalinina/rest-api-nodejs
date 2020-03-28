@@ -3,14 +3,14 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
-export default class LoginDriver extends Component {
+export default class LoginUser extends Component {
 
   constructor(props) {
     super(props)
 
     // Setting up functions
-    this.onChangeDriverEmail = this.onChangeDriverEmail.bind(this);
-    this.onChangeDriverPassword = this.onChangeDriverPassword.bind(this);
+    this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
+    this.onChangeUserPassword = this.onChangeUserPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     // Setting up state
@@ -20,23 +20,23 @@ export default class LoginDriver extends Component {
     }
   }
 
-  onChangeDriverEmail(e) {
+  onChangeUserEmail(e) {
     this.setState({email: e.target.value})
   }
 
-  onChangeDriverPassword(e) {
+  onChangeUserPassword(e) {
     this.setState({password: e.target.value})
   }
 
   onSubmit(e) {
     e.preventDefault()
 
-    const driverObj = {
+    const userObj = {
       email: this.state.email,
       password: this.state.password
     };
 
-    axios.post('http://localhost:4000/api/drivers/login', driverObj)
+    axios.post('http://localhost:4000/api/users/login', userObj)
       // .then(res => console.log(res))
       .then(function (res) {
         // console.log(res.data);
@@ -63,12 +63,12 @@ export default class LoginDriver extends Component {
 
         <Form.Group controlId="Email">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" value={this.state.email} onChange={this.onChangeDriverEmail}/>
+          <Form.Control type="email" value={this.state.email} onChange={this.onChangeUserEmail}/>
         </Form.Group>
 
         <Form.Group controlId="Password">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" value={this.state.password} onChange={this.onChangeDriverPassword}/>
+          <Form.Control type="password" value={this.state.password} onChange={this.onChangeUserPassword}/>
         </Form.Group>
 
         <Button variant="danger" size="lg" block="block" type="submit">

@@ -11,39 +11,73 @@ export default class Profile extends Component {
     super(props)
 
     // Setting up functions
-    this.onChangeDriverPassword = this.onChangeDriverPassword.bind(this);
+    this.onChangeUserPassword = this.onChangeUserPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     // Setting up state
     this.state = {
       password: '',
     }
+
   }
 
-  onChangeDriverPassword(e) {
+  componentDidMount() {
+    axios.get('http://localhost:4000/users/:id')
+    
+    //  .then(res => {
+    //     let pass = localStorage.getItem('token', res.data)
+
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+      .then(res => {
+        
+        this.setState({
+          name: res.data.name,
+          email: res.data.email,
+          tel: res.data.tel,
+          password: res.data.password,
+          role: res.data.role
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  onChangeUserPassword(e) {
     this.setState({password: e.target.value})
   }
 
   onSubmit(e) {
     e.preventDefault()
 
-    let id = 100;
-    id++;
+    // let id = 100;
+    // id++;
 
-    const driverObj = {
-      password: this.state.password
+    const userObj = {
+      name: this.state.name,
+      email: this.state.email,
+      tel: this.state.tel,
+      password: this.state.password,
+      role: this.state.role
     };
 
-    axios.put(`http://localhost:4000/drivers/${id}/profile`, driverObj)
-      .then(res => console.log(res.data));
+    axios.put('http://localhost:4000/users/:id', userObj)
+      .then((res) => {
+        console.log(res.data)
+        console.log('user successfully updated')
+      })
+      .catch(err => console.log("SERVER ERROR TO CLIENT:", err))
      
     this.setState({ password: ''})
 
     console.log(`User successfully changed password!`);
-    console.log(`Email: ${this.state.email}`);
+    console.log(`Password: ${this.state.password}`);
 
     // Redirect to Login 
-    this.props.history.push('/profile');
+    // this.props.history.push('/profile');
   }
 
   render() {
@@ -57,7 +91,7 @@ export default class Profile extends Component {
 
         <Form.Group controlId="Password">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" value={this.state.password} onChange={this.onChangeDriverPassword}/>
+          <Form.Control type="password" value={this.state.password} onChange={this.onChangeUserPassword}/>
         </Form.Group>
 
         <Button variant="danger" size="lg" block="block" type="submit">
