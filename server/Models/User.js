@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let driverSchema = new Schema({
+let userSchema = new Schema({
   name: {
     type: String
   },
@@ -18,7 +18,7 @@ let driverSchema = new Schema({
     type: String
   }
 }, {
-    collection: 'drivers'
+    collection: 'users'
   })
 
-module.exports = mongoose.model('Driver', driverSchema)
+module.exports = mongoose.model('user', userSchema)

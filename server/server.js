@@ -2,12 +2,11 @@ let express = require('express');
 let mongoose = require('mongoose');
 let cors = require('cors');
 let bodyParser = require('body-parser');
-// let dbConfig = require('./database/db');
 let dbConfig = require('config');
 let db = dbConfig.get('db');
 
 // Express Route
-const driverRoute = require('../server/routes/driver.route');
+const driverRoute = require('./routes/user.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -30,7 +29,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/api/drivers', driverRoute)
+app.use('/api/users', driverRoute)
 
 // PORT
 const port = process.env.PORT || 4000;
