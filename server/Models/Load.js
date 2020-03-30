@@ -6,7 +6,8 @@ let loadSchema = new Schema({
     type: String
   },
   logs: {
-    type: [{message, time}]
+    type: Map,
+    of: String
   },
   assigned_to: {
     type:  String
@@ -18,7 +19,8 @@ let loadSchema = new Schema({
     type: String
   },
   dimensions: {
-    type: Object = {width, length, height}
+    type: Map,
+    of: Number
   },
   payload: {
     type: Number

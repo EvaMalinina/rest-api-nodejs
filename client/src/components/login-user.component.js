@@ -47,7 +47,6 @@ export default class LoginUser extends Component {
       })
 
     this.setState({email: '', password: ''})
-    this.props.handleLoginClick();
 
     console.log(`User successfully logged!`);
     console.log(`Email: ${this.state.email}`);
@@ -62,7 +61,7 @@ export default class LoginUser extends Component {
     const isLoggedIn = this.props.isLoggedIn;
     return (
     <div className="form-wrapper">
-      <Form onSubmit={ this.onSubmit } isLoggedIn={isLoggedIn}>
+      <Form onSubmit={ this.onSubmit }>
 
         <Form.Group controlId="Email">
           <Form.Label>Email</Form.Label>
@@ -74,7 +73,7 @@ export default class LoginUser extends Component {
           <Form.Control type="password" value={this.state.password} onChange={this.onChangeUserPassword}/>
         </Form.Group>
 
-        <Button variant="danger" size="lg" block="block" type="submit">
+        <Button variant="danger" size="lg" block="block" type="submit"  onClick={isLoggedIn}>
           Login
         </Button>
       </Form>

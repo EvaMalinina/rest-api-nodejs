@@ -9,7 +9,7 @@ let userSchema = new Schema({
     type: String
   },
   tel: {
-    type: Number
+    type: String
   },
   password: {
     type: String
@@ -20,5 +20,5 @@ let userSchema = new Schema({
 }, {
     collection: 'users'
   })
-
+  
 module.exports = mongoose.model('user', userSchema)

@@ -7,11 +7,12 @@ const mongoose = require('mongoose'),
   bcrypt = require('bcrypt');
   saltRounds = 9;
   withAuth = require('../middleware');
+  userValidation = require('../validation/user.validation')
 
 // User Model
 let userSchema = require('../models/User');
-
-// CREATE users
+  
+// CREATE user
 router.post('/', async (req, res, next) => {
       
     // to hash pass
@@ -25,11 +26,14 @@ router.post('/', async (req, res, next) => {
         password: hashedPassword,
         role: req.body.role
     });
+
     try {
-        const saveduser = user.save();
-        res.send({user: user._id});
+      const value = await userValidation.validateAsync(user._doc);
+      const savedUser = user.save();
+        // res.send({user: user._id});
+      res.send("User registered");
     }catch(err){
-        res.status(500).send(err);
+      res.status(500).send(err);
     }
 });
 
@@ -44,7 +48,6 @@ router.post('/login', async (req, res) => {
     if(await bcrypt.compare(req.body.password, user.password)) {
       // token
       const accessToken = jwt.sign({_id: user._id}, process.env.ACCESS_TOKEN_SECRET);
-      // res.send({ accessToken: accessToken });
       res.header('authorization', accessToken).send(accessToken);
     } else {
       res.send("Credentials are not correct.")
@@ -79,7 +82,7 @@ router.get('/:id', (req, res) => {
 
 
 // UPDATE user password
-router.put('/:id', (req, res, next) => {
+router.put('/:id', withAuth, (req, res, next) => {
   userSchema.findById(req.params.id, async (err, userSchema) => {
     
     if (!userSchema) {

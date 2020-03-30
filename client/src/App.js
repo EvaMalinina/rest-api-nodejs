@@ -24,7 +24,7 @@ class App extends Component {
     this.state = { isLoggedIn: false };
   }
 
-  handleLoginClick(e) {
+  handleLoginClick() {
    
     if (!localStorage.getItem("token")) {
       window.location.href = '/login';

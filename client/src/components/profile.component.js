@@ -44,8 +44,6 @@ export default class Profile extends Component {
 
   onSubmit(e) {
     e.preventDefault()
-    // let id = 100;
-    // id++;
 
     const userObj = {
       name: this.state.name,
