@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 
-// user validation
-const userValidation = Joi.object({
+// user register validation
+const registerValidation = Joi.object({
     _id: Joi.any(),
     name: Joi.string()
         .min(3)
@@ -21,4 +21,4 @@ const userValidation = Joi.object({
     role: Joi.string().required()
 })
 
-module.exports = userValidation;
+module.exports = registerValidation;

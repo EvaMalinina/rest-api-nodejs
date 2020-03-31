@@ -2,12 +2,13 @@ import React, {Component} from "react";
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import PropTypes from "prop-types";
 
-export default class CreateDriver extends Component {
+export default class CreateUser extends Component {
 
   constructor(props) {
+    
     super(props)
-
     // Setting up functions
     this.onChangeDriverName = this.onChangeDriverName.bind(this);
     this.onChangeDriverEmail = this.onChangeDriverEmail.bind(this);
@@ -81,40 +82,45 @@ export default class CreateDriver extends Component {
 
   render() {
     return (
-    <div className="form-wrapper">
-      <Form onSubmit={ this.onSubmit }>
-        <Form.Group controlId="Name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control type="text" value={this.state.name} onChange={this.onChangeDriverName} />
-        </Form.Group>
+      <div className="form-wrapper">
+        <Form onSubmit={ this.onSubmit }>
+          <Form.Group controlId="Name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" value={this.state.name} onChange={this.onChangeDriverName} />
+          </Form.Group>
 
-        <Form.Group controlId="Email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control type="email" value={this.state.email} onChange={this.onChangeDriverEmail}/>
-        </Form.Group>
+          <Form.Group controlId="Email">
+            <Form.Label>Email /.com /.net only</Form.Label>
+            <Form.Control type="email" value={this.state.email} onChange={this.onChangeDriverEmail}/>
+          </Form.Group>
 
-        <Form.Group controlId="Tel">
-          <Form.Label>Tel</Form.Label>
-          <Form.Control type="number" value={this.state.tel} onChange={this.onChangeDriverTel}/>
-        </Form.Group>
+          <Form.Group controlId="Tel">
+            <Form.Label>Tel</Form.Label>
+            <Form.Control type="number" value={this.state.tel} onChange={this.onChangeDriverTel}/>
+          </Form.Group>
 
-        <Form.Group controlId="Password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" value={this.state.password} onChange={this.onChangeDriverPassword}/>
-        </Form.Group>
+          <Form.Group controlId="Password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" value={this.state.password} onChange={this.onChangeDriverPassword}/>
+          </Form.Group>
 
-        <Form.Group controlId="Role">
-          <Form.Label>Choose your role</Form.Label>
-          <Form.Control as="select" value={this.state.role} onChange={this.onChangeDriverRole}>
-            <option value="driver">Driver</option>
-            <option value="shipper">Shipper</option>
-          </Form.Control>
-        </Form.Group>
+          <Form.Group controlId="Role">
+            <Form.Label>Choose your role</Form.Label>
+            <Form.Control as="select" value={this.state.role} onChange={this.onChangeDriverRole}>
+              <option value="driver">Driver</option>
+              <option value="shipper">Shipper</option>
+            </Form.Control>
+          </Form.Group>
 
-        <Button variant="danger" size="lg" block="block" type="submit">
-          Create Account
-        </Button>
-      </Form>
-    </div>);
+          <Button variant="danger" size="lg" block="block" type="submit">
+            Create Account
+          </Button>
+        </Form>
+      </div>
+    ); 
   }
 }
+
+CreateUser.propTypes = {
+  history: PropTypes.string.isRequired
+};

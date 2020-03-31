@@ -61,7 +61,6 @@ router.get('/:id', (req, res, next) => {
   })
 });
 
-
 // UPDATE shipper load with status "NEW"
 router.put('/mutation/:id', (req, res, next) => {
 
@@ -88,19 +87,15 @@ router.put('/mutation/:id', (req, res, next) => {
   })
 })
 
-// DELETE not assigned to shipper loads
+// DELETE not assigned to driver loads
 router.delete('/bin/:id', (req, res, next) => {   
-  loadSchema.findByIdAndDelete(req.params.id, (error, data) => {
+  loadSchema.findOneAndDelete({ _id: req.params.id, status: "NEW"}, (error, data) => {
     if (error) {
       return next(error);
     } else {
-      if ( loadSchema.status = "NEW") {
-        res.status(200).json({
-          msg: data
-        })
-      } else {
-        res.status(500).send("This load is already in process. You can not delete such loads.")
-      }
+      res.status(200).json({
+        msg: data
+      })
     }
   })
 });
@@ -109,7 +104,6 @@ router.delete('/bin/:id', (req, res, next) => {
 router.put('/shipment/:id', (req, res, next) => {
 
   loadSchema.findById(req.params.id, (err, loadSchema) => {
-    console.log(loadSchema);
     if (!loadSchema) {
       res.status(404).send("load is not found");
     }

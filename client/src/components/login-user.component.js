@@ -2,12 +2,12 @@ import React, {Component} from "react";
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import PropTypes from "prop-types";
 
 export default class LoginUser extends Component {
 
   constructor(props) {
     super(props)
-
     // Setting up functions
     this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
     this.onChangeUserPassword = this.onChangeUserPassword.bind(this);
@@ -80,3 +80,8 @@ export default class LoginUser extends Component {
     </div>);
   }
 }
+
+LoginUser.propTypes = {
+  history: PropTypes.string.isRequired,
+  isLoggedIn: PropTypes.string.isRequired
+};

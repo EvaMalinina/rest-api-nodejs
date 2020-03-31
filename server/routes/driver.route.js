@@ -1,7 +1,6 @@
 require('dotenv').config();
 
-const mongoose = require('mongoose'),
-  express = require('express'),
+const express = require('express'),
   router = express.Router();
   jwt = require('jsonwebtoken');
   bcrypt = require('bcrypt');
@@ -94,19 +93,20 @@ router.get('/:id/trucks', (req, res, next) => {
 
 // UPDATE not assigned to driver trucks info 
 router.put('/mutation/:id', (req, res, next) => {
-  truckSchema.findById(req.params.id, (err, truckSchema) => {
+  truckSchema.findById(req.params.id, async (err, truckSchema) => {
 
     if (!truckSchema) {
       res.status(404).send("Truck is not found");
     }
-  
-    if ( truckSchema.assigned_to = "none") {
-      truckSchema.type = req.body.type;
-    } else {
-      res.status(500).send("This truck is already assigned. You can not change info of assigned truck.")
-    }
 
     try {
+
+      if ( truckSchema.assigned_to = "none") {
+        truckSchema.type = req.body.type;
+      } else {
+        res.status(500).send("This truck is already assigned. You can not change info of assigned truck.")
+      }
+
       const savedTruck = truckSchema.save();
       res.json("Truck type have been changed.");
 
@@ -122,7 +122,7 @@ router.delete('/bin/:id', (req, res, next) => {
     if (error) {
       return next(error);
     } else {
-      if ( truckSchema.assigned_to = "none") {
+      if ( truckSchema.assigned_to == "none") {
         res.status(200).json({
           msg: data
         })

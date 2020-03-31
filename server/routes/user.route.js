@@ -7,7 +7,8 @@ const mongoose = require('mongoose'),
   bcrypt = require('bcrypt');
   saltRounds = 9;
   withAuth = require('../middleware');
-  userValidation = require('../validation/user.validation')
+  registerValidation = require('../validation/register.validation');
+  loginValidation = require('../validation/login.validation')
 
 // User Model
 let userSchema = require('../models/User');
@@ -20,18 +21,18 @@ router.post('/', async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new userSchema({
-        name: req.body.name,
-        email: req.body.email,
-        tel: req.body.tel,
-        password: hashedPassword,
-        role: req.body.role
+      name: req.body.name,
+      email: req.body.email,
+      tel: req.body.tel,
+      password: hashedPassword,
+      role: req.body.role
     });
 
     try {
-      const value = await userValidation.validateAsync(user._doc);
+      const value = await registerValidation.validateAsync(user._doc);
       const savedUser = user.save();
-        // res.send({user: user._id});
       res.send("User registered");
+
     }catch(err){
       res.status(500).send(err);
     }
@@ -39,7 +40,14 @@ router.post('/', async (req, res, next) => {
 
 // LOGIN users
 router.post('/login', async (req, res) => {
-
+  // validation of written data by user
+  const userValid = {
+    email: req.body.email,
+    password: req.body.password
+  };
+  const value = await loginValidation.validateAsync(userValid._doc);
+  
+  // check if there is such user in db
   const user = await userSchema.findOne({email: req.body.email});
   if ( user == null ) {
     return res.status(400).send("Cannot find a user.")
@@ -83,6 +91,7 @@ router.get('/:id', (req, res) => {
 
 // UPDATE user password
 router.put('/:id', withAuth, (req, res, next) => {
+
   userSchema.findById(req.params.id, async (err, userSchema) => {
     
     if (!userSchema) {
