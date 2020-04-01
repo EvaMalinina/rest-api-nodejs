@@ -12,7 +12,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import CreateUser from "./components/create-user.component";
 import EditUser from "./components/edit-user.component";
 import LoginUser from "./components/login-user.component";
-import Profile from "./components/profile.component";
+import driverProfile from "./components/driver.component";
+import shipperProfile from "./components/shipper.component";
 
 
 class App extends Component {
@@ -33,7 +34,7 @@ class App extends Component {
   }
 
   handleLogoutClick() {
-    localStorage.clear("token");
+    localStorage.clear("token", "role");
     window.location.href = '/';
     this.setState({isLoggedIn: false});
   }
@@ -68,7 +69,7 @@ class App extends Component {
                       </Nav>
                     ) : (
                       <Nav>
-                        <Link to={"/profile"} className="nav-link" onClick={this.handleLoginClick}>
+                        <Link to={"/login"} className="nav-link" onClick={this.handleLoginClick}>
                           Sign in
                         </Link>
                       </Nav>
@@ -88,7 +89,8 @@ class App extends Component {
                     <Route path="/users" component={CreateUser} />
                     <Route path="/users/:id" component={EditUser} />
                     <Route path="/login" component={LoginUser} />
-                    <Route path="/profile" component={Profile} />
+                    <Route path="/driver" component={driverProfile} />
+                    <Route path="/shipper" component={shipperProfile} />
                   </Switch>
                 </div>
               </Col>

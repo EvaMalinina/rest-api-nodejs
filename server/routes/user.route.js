@@ -55,8 +55,10 @@ router.post('/login', async (req, res) => {
   try {
     if(await bcrypt.compare(req.body.password, user.password)) {
       // token
-      const accessToken = jwt.sign({_id: user._id}, process.env.ACCESS_TOKEN_SECRET);
-      res.header('authorization', accessToken).send(accessToken);
+      const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
+      
+      // res.json('authorization', accessToken).send(accessToken);
+      res.json({ accessToken, user })
     } else {
       res.send("Credentials are not correct.")
     }
@@ -78,7 +80,7 @@ router.get('/', (req, res) => {
 })
 
 // READ Single user
-router.get('/:id', (req, res) => {
+router.get('/:id', withAuth, (req, res) => {
   userSchema.findById(req.params.id, (error, data) => {
     if (error) {
       return next(error)

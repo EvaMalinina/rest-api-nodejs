@@ -24,6 +24,7 @@ Start Backend Server
 Get inside the backend folder "server"
 Run 
 > npm install 
+
 to install required packages
 
 Open terminal run:

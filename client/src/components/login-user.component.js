@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import PropTypes from "prop-types";
+import history from './history';
 
 export default class LoginUser extends Component {
 
@@ -37,10 +38,10 @@ export default class LoginUser extends Component {
     };
 
     axios.post('http://localhost:4000/api/users/login', userObj)
-      // .then(res => console.log(res))
       .then(function (res) {
-        // console.log(res.data);
-        localStorage.setItem('token', res.data);
+        localStorage.setItem('token', res.data.accessToken);
+        localStorage.setItem('role', res.data.user.role);
+        history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
       })
       .catch(function (error) {
         console.log("There is problem with login", error);
@@ -52,11 +53,10 @@ export default class LoginUser extends Component {
     console.log(`Email: ${this.state.email}`);
     console.log(`Password: ${this.state.password}`);
     console.log(`logged: ${this.state.isLoggedIn}`);
-
     // Redirect to Login 
-    this.props.history.push('/profile');
+    // this.props.history.push(`/role`);
   }
-
+ 
   render() {
     const isLoggedIn = this.props.isLoggedIn;
     return (
@@ -82,6 +82,6 @@ export default class LoginUser extends Component {
 }
 
 LoginUser.propTypes = {
-  history: PropTypes.string.isRequired,
-  isLoggedIn: PropTypes.string.isRequired
+  history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.string
 };

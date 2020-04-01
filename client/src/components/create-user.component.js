@@ -122,5 +122,5 @@ export default class CreateUser extends Component {
 }
 
 CreateUser.propTypes = {
-  history: PropTypes.string.isRequired
+  history: PropTypes.object.isRequired
 };
