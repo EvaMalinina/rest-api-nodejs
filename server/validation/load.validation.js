@@ -13,11 +13,12 @@ const loadValidation = Joi.object({
       .required(),
 
     status: Joi.string()
-      .valid('NEW', 'POSTED', 'ASSIGED', 'SHIPPED')
+      .valid('NEW', 'POSTED', 'ASSIGNED', 'SHIPPED')
       .required(),
 
     state: Joi.string()
-      .valid('En route to pick up', 
+      .valid( '',
+              'En route to pick up', 
               'Arrived to Pick Up', 
               'En route to delivery', 
               'Arrived to delivery')
@@ -27,7 +28,9 @@ const loadValidation = Joi.object({
       .required(),
 
     payload: Joi.number()
-      .required()
+      .required(),
+
+    __v: Joi.number()
 })
 
 module.exports = loadValidation;

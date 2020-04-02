@@ -19,7 +19,7 @@ let loadSchema = new Schema({
     type: String
   },
   dimensions: {
-    type: Map,
+    type: Object,
     of: Number
   },
   payload: {

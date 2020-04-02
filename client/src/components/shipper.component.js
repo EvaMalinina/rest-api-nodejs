@@ -37,7 +37,8 @@ export default class shipperProfile extends Component {
       role: this.state.role
     };
 
-    axios.put('http://localhost:4000/users/:id', userObj)
+    const id = localStorage.getItem('id');
+    axios.put('http://localhost:4000/users/' + id, userObj)
      
       .then((res) => {
         console.log(res.data)

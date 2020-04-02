@@ -4,12 +4,12 @@ let cors = require('cors');
 let bodyParser = require('body-parser');
 let dbConfig = require('config');
 let db = dbConfig.get('db');
-let  Joi = require('@hapi/joi');
 
 // Express Route
 const userRoute = require('./routes/user.route');
 const driverRoute = require('./routes/driver.route');
 const shipperRoute = require('./routes/shipper.route');
+const loadRoute = require('./routes/load.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -35,6 +35,7 @@ app.use(bodyParser.urlencoded({
 app.use('/api/users', userRoute);
 app.use('/api/driver', driverRoute);
 app.use('/api/shipper', shipperRoute);
+app.use('/api/load', loadRoute);
 
 
 // PORT

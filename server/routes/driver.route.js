@@ -7,9 +7,12 @@ const express = require('express'),
   saltRounds = 9;
   withAuth = require('../middleware');
   truckValidation = require('../validation/truck.validation');
+  loadValidation = require('../validation/load.validation');
+  
 
-// Truck Model
+// Models
 let truckSchema = require('../models/Truck');
+let loadSchema = require('../models/Load');
 
 // CREATE truck
 router.post('/:id', async (req, res, next) => {
@@ -132,5 +135,37 @@ router.delete('/bin/:id', (req, res, next) => {
     }
   })
 });
+
+// READ assigned to driver load info
+router.get('/:id/load', (req, res, next) => {
+  loadSchema.find({ assigned_to: req.params.id }, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+});
+
+// change status of assigned load
+router.put('/load/mutation/:id', (req, res, next) => {
+  loadSchema.findById(req.params.id,  async (err, loadSchema) => {
+    
+    if (!loadSchema) {
+      res.status(404).send("Load is not found.");
+    }
+
+    loadSchema.state = req.body.state;
+
+    try {
+      const value = await loadValidation.validateAsync(loadSchema._doc);
+      const savedLoad = loadSchema.save();
+      res.json('Load state updated!');
+
+    } catch(err) {
+      res.status(500).send(err);
+    }
+  })
+})
 
 module.exports = router;

@@ -5,7 +5,7 @@ import axios from 'axios';
 import PropTypes from "prop-types";
 import history from './history';
 
-export default class LoginUser extends Component {
+class LoginUser extends Component {
 
   constructor(props) {
     super(props)
@@ -29,7 +29,7 @@ export default class LoginUser extends Component {
     this.setState({password: e.target.value})
   }
 
-  onSubmit(e) {
+  onSubmit(e, props) {
     e.preventDefault()
 
     const userObj = {
@@ -40,8 +40,12 @@ export default class LoginUser extends Component {
     axios.post('http://localhost:4000/api/users/login', userObj)
       .then(function (res) {
         localStorage.setItem('token', res.data.accessToken);
+        localStorage.setItem('id', res.data.user._id);
+        localStorage.setItem('name', res.data.user.name);
+        localStorage.setItem('password', res.data.user.password);
         localStorage.setItem('role', res.data.user.role);
         history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
+        // this.context.router.history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
       })
       .catch(function (error) {
         console.log("There is problem with login", error);
@@ -85,3 +89,5 @@ LoginUser.propTypes = {
   history: PropTypes.object.isRequired,
   isLoggedIn: PropTypes.string
 };
+
+export default LoginUser;

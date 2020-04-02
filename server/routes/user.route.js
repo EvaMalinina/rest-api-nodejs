@@ -57,8 +57,7 @@ router.post('/login', async (req, res) => {
       // token
       const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
       
-      // res.json('authorization', accessToken).send(accessToken);
-      res.json({ accessToken, user })
+      res.json({ accessToken, user }).header('authorization', accessToken);
     } else {
       res.send("Credentials are not correct.")
     }
