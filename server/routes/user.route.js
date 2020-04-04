@@ -7,6 +7,10 @@ const mongoose = require('mongoose'),
   bcrypt = require('bcrypt');
   saltRounds = 9;
   withAuth = require('../middleware');
+  crypto = require('crypto');
+  nodemailer = require('nodemailer');
+  passwordResetToken = require('../models/ResetToken');
+
   registerValidation = require('../validation/register.validation');
   loginValidation = require('../validation/login.validation')
 
@@ -56,8 +60,7 @@ router.post('/login', async (req, res) => {
     if(await bcrypt.compare(req.body.password, user.password)) {
       // token
       const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
-      
-      res.json({ accessToken, user }).header('authorization', accessToken);
+      res.header('authorization', accessToken).json({ accessToken, user })
     } else {
       res.send("Credentials are not correct.")
     }
@@ -65,7 +68,6 @@ router.post('/login', async (req, res) => {
     res.status(500).send();
   }
 });
-
 
 // READ users
 router.get('/', (req, res) => {
@@ -92,20 +94,27 @@ router.get('/:id', withAuth, (req, res) => {
 
 // UPDATE user password
 router.put('/:id', withAuth, (req, res, next) => {
+  userSchema.findById({ _id: req.params.id }, async (err, userSchema) => {
 
-  userSchema.findById(req.params.id, async (err, userSchema) => {
-    
     if (!userSchema) {
-      res.status(404).send("data is not found");
+      res.status(404).send("There is no user with such id.");
     }
-    const salt = await bcrypt.genSalt(9);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    
-    userSchema.password = hashedPassword;
 
     try {
-      const saveduser = userSchema.save();
-      res.json('userSchema updated!');
+      if (await bcrypt.compare(req.body.oldPassword, userSchema.password)) {
+
+        const salt = await bcrypt.genSalt(9);
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+
+        userSchema.password = hashedPassword;
+        userSchema.save();
+        res.json('userSchema updated!');
+        // token
+        // const accessToken = jwt.sign({ _id: userSchema._id }, process.env.ACCESS_TOKEN_SECRET);
+        // res.header('authorization', accessToken).json({ accessToken, user })
+      } else {
+        res.send("Old password is not correct.")
+      }
 
     } catch(err) {
       res.status(500).send(err);

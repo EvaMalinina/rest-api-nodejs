@@ -16,7 +16,7 @@ const registerValidation = Joi.object({
         .max(12)
         .required(),
 
-    password: Joi.string().required(),
+    password: Joi.string().min(5).required(),
 
     role: Joi.string().required()
 })

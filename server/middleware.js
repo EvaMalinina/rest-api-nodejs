@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-const withAuth = function (req, res, next){
-      const accessToken = req.header('authorization');
+const withAuth = function (req, res, token, next){
+      const accessToken = req.header('authorization') || token;
+      // const accessToken = req.header('authorization');
       if(!accessToken) return res.status(401).send("Access Denied");
 
     try{

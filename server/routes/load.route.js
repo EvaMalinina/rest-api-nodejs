@@ -101,7 +101,7 @@ router.put('/', async (req, res) => {
   }
 })
 
-// delivered load status to "SHIPPED", id - asssigned_to
+// delivered load change status to "SHIPPED", id - asssigned_to
 router.put('/finish/:id', async (req, res) => {
   const load = await loadSchema.findOne({ state: "Arrived to delivery" });
   const truck = await truckSchema.findById(req.params.id);

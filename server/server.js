@@ -1,15 +1,16 @@
 let express = require('express');
-let mongoose = require('mongoose');
-let cors = require('cors');
-let bodyParser = require('body-parser');
-let dbConfig = require('config');
-let db = dbConfig.get('db');
+    mongoose = require('mongoose');
+    cors = require('cors');
+    bodyParser = require('body-parser');
+    dbConfig = require('config');
+    db = dbConfig.get('db');
 
 // Express Route
 const userRoute = require('./routes/user.route');
-const driverRoute = require('./routes/driver.route');
-const shipperRoute = require('./routes/shipper.route');
-const loadRoute = require('./routes/load.route');
+      driverRoute = require('./routes/driver.route');
+      shipperRoute = require('./routes/shipper.route');
+      loadRoute = require('./routes/load.route');
+      pswResetRoute = require('./routes/pswreset.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -36,7 +37,7 @@ app.use('/api/users', userRoute);
 app.use('/api/driver', driverRoute);
 app.use('/api/shipper', shipperRoute);
 app.use('/api/load', loadRoute);
-
+app.use('/api/resetpassword', pswResetRoute);
 
 // PORT
 const port = process.env.PORT || 4000;

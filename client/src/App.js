@@ -14,6 +14,7 @@ import EditUser from "./components/edit-user.component";
 import LoginUser from "./components/login-user.component";
 import driverProfile from "./components/driver.component";
 import shipperProfile from "./components/shipper.component";
+import resetPassword from "./components/reset-user.component";
 
 
 class App extends Component {
@@ -91,6 +92,7 @@ class App extends Component {
                     <Route path="/login" component={LoginUser} />
                     <Route path="/driver" component={driverProfile} />
                     <Route path="/shipper" component={shipperProfile} />
+                    <Route path="/reset" component={resetPassword} />
                   </Switch>
                 </div>
               </Col>

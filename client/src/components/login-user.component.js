@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import PropTypes from "prop-types";
-import history from './history';
+// import history from './history';
 
 class LoginUser extends Component {
 
@@ -44,7 +44,9 @@ class LoginUser extends Component {
         localStorage.setItem('name', res.data.user.name);
         localStorage.setItem('password', res.data.user.password);
         localStorage.setItem('role', res.data.user.role);
-        history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
+        setTimeout(changeLocation(res.data.user.role), 1000);
+        
+        // history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
         // this.context.router.history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
       })
       .catch(function (error) {
@@ -57,8 +59,11 @@ class LoginUser extends Component {
     console.log(`Email: ${this.state.email}`);
     console.log(`Password: ${this.state.password}`);
     console.log(`logged: ${this.state.isLoggedIn}`);
+
     // Redirect to Login 
-    // this.props.history.push(`/role`);
+    let changeLocation = (role) => {
+      this.props.history.push(role === 'Driver' ? '/driver' : '/shipper');
+    }
   }
  
   render() {
