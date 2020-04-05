@@ -50,7 +50,7 @@ class LoginUser extends Component {
         // this.context.router.history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
       })
       .catch(function (error) {
-        console.log("There is problem with login", error);
+        alert("There is problem with login", error);
       })
 
     this.setState({email: '', password: ''})

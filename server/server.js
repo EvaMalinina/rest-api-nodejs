@@ -11,6 +11,7 @@ const userRoute = require('./routes/user.route');
       shipperRoute = require('./routes/shipper.route');
       loadRoute = require('./routes/load.route');
       pswResetRoute = require('./routes/pswreset.route');
+      imgRoute = require('./routes/images.route');
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
@@ -27,6 +28,7 @@ mongoose.connect(db, {
 
 const app = express();
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -38,6 +40,7 @@ app.use('/api/driver', driverRoute);
 app.use('/api/shipper', shipperRoute);
 app.use('/api/load', loadRoute);
 app.use('/api/resetpassword', pswResetRoute);
+app.use('/api/user/image', imgRoute);
 
 // PORT
 const port = process.env.PORT || 4000;

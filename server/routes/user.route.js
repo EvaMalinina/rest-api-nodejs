@@ -1,18 +1,17 @@
 require('dotenv').config();
 
-const mongoose = require('mongoose'),
-  express = require('express'),
-  router = express.Router();
-  jwt = require('jsonwebtoken');
-  bcrypt = require('bcrypt');
-  saltRounds = 9;
-  withAuth = require('../middleware');
-  crypto = require('crypto');
-  nodemailer = require('nodemailer');
-  passwordResetToken = require('../models/ResetToken');
+const express = require('express'),
+      router = express.Router();
+      jwt = require('jsonwebtoken');
+      bcrypt = require('bcrypt');
+      saltRounds = 9;
+      withAuth = require('../middleware');
+      crypto = require('crypto');
+      nodemailer = require('nodemailer');
+      passwordResetToken = require('../models/ResetToken');
 
-  registerValidation = require('../validation/register.validation');
-  loginValidation = require('../validation/login.validation')
+      registerValidation = require('../validation/register.validation');
+      loginValidation = require('../validation/login.validation')
 
 // User Model
 let userSchema = require('../models/User');
