@@ -17,7 +17,8 @@ const userRoute = require('./routes/user.route');
 mongoose.Promise = global.Promise;
 mongoose.connect(db, {
   useNewUrlParser: true,
-  useUnifiedTopology: true 
+  useUnifiedTopology: true,
+  useCreateIndex: true
 }).then(() => {
   console.log('Database sucessfully connected!')
 },

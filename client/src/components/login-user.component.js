@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import PropTypes from "prop-types";
 // import history from './history';
+// import { LoginContext } from '../contexts/LoginContext';
 
 class LoginUser extends Component {
 
@@ -17,7 +18,8 @@ class LoginUser extends Component {
     // Setting up state
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      isLoggedIn: true
     }
   }
 
@@ -29,9 +31,8 @@ class LoginUser extends Component {
     this.setState({password: e.target.value})
   }
 
-  onSubmit(e, props) {
+  onSubmit(e) {
     e.preventDefault()
-
     const userObj = {
       email: this.state.email,
       password: this.state.password
@@ -53,7 +54,7 @@ class LoginUser extends Component {
         alert("There is problem with login", error);
       })
 
-    this.setState({email: '', password: ''})
+    this.setState({email: '', password: '', isLoggedIn: true})
 
     console.log(`User successfully logged!`);
     console.log(`Email: ${this.state.email}`);
@@ -67,26 +68,33 @@ class LoginUser extends Component {
   }
  
   render() {
-    const isLoggedIn = this.props.isLoggedIn;
     return (
-    <div className="form-wrapper">
-      <Form onSubmit={ this.onSubmit }>
+      // <LoginContext.Consumer>{(LoginContext) => {
+        // const { isLoggedIn, toggleLogin } = LoginContext;
 
-        <Form.Group controlId="Email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control type="email" value={this.state.email} onChange={this.onChangeUserEmail}/>
-        </Form.Group>
-
-        <Form.Group controlId="Password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" value={this.state.password} onChange={this.onChangeUserPassword}/>
-        </Form.Group>
-
-        <Button variant="danger" size="lg" block="block" type="submit"  onClick={isLoggedIn}>
-          Login
-        </Button>
-      </Form>
-    </div>);
+        // return(
+          <div className="form-wrapper">
+            <Form onSubmit={ this.onSubmit }>
+      
+              <Form.Group controlId="Email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="email" value={this.state.email} onChange={this.onChangeUserEmail}/>
+              </Form.Group>
+      
+              <Form.Group controlId="Password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" value={this.state.password} onChange={this.onChangeUserPassword}/>
+              </Form.Group>
+      
+              <Button variant="danger" size="lg" block="block" type="submit" onClick={() => { this.props.updateData(this.state.isLoggedIn)}}>
+                Login
+              </Button>
+            </Form>
+          </div>
+        // )
+      // }}
+      // </LoginContext.Consumer>
+    );
   }
 }
 
