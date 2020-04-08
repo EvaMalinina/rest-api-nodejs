@@ -15,27 +15,22 @@ let truckSchema = require('../models/Truck');
 let loadSchema = require('../models/Load');
 
 // CREATE truck
-router.post('/:id', async (req, res, next) => {
-  
-    if (numberOfTrucks.length < 5) {
-      const truck = new truckSchema({
-        created_by: req.body.created_by,
-        assigned_to: req.body.assigned_to,
-        status: req.body.status,
-        type: req.body.type
-      });
+router.post('/:id', async (req, res) => {
+  const truck = new truckSchema({
+    created_by: req.body.created_by,
+    assigned_to: req.body.assigned_to,
+    status: req.body.status,
+    type: req.body.type
+  });
 
-      try {
-        const value = await truckValidation.validateAsync(truck._doc);
-        const savedTruck = await truck.save();
-        res.send({truck: truck._id});
+  try {
+    const value = await truckValidation.validateAsync(truck._doc);
+    const savedTruck = await truck.save();
+    res.send({truck});
 
-      } catch(err) {
-        res.status(500).send(err);
-      }
-    } else {
-      res.status(401).json("Your number of trucks riched limit. Contact support.")
-    }
+  } catch(err) {
+    res.status(500).send(err);
+  }
 });
 
 // READ all trucks
@@ -50,7 +45,6 @@ router.get('/', (req, res) => {
 })
 
 // READ single driver trucks
-const numberOfTrucks = 
 router.get('/:id', (req, res, next) => {
   truckSchema.find({ created_by: req.params.id }, (error, data) => {
     if (error) {

@@ -19,7 +19,7 @@ import renewPassword from "./components/renew-psw.component";
 
 
 class App extends Component {
-  
+
   constructor(props) {
     super(props);
     this.handleLoginClick = this.handleLoginClick.bind(this);
@@ -48,7 +48,7 @@ class App extends Component {
     this.setState({ isLoggedIn: value })
   }
   render () {
-
+    // const Token = localStorage.getItem('token', token);
     return (
       <Router>
         {/* <LoginContextProvider> */}

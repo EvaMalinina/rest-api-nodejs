@@ -8,7 +8,6 @@ const express = require('express'),
       withAuth = require('../middleware');
       crypto = require('crypto');
       nodemailer = require('nodemailer');
-      passwordResetToken = require('../models/ResetToken');
 
       registerValidation = require('../validation/register.validation');
       loginValidation = require('../validation/login.validation')
@@ -28,7 +27,8 @@ router.post('/', async (req, res, next) => {
       email: req.body.email,
       tel: req.body.tel,
       password: hashedPassword,
-      role: req.body.role
+      role: req.body.role,
+      resetPasswordToken: ' '
     });
 
     try {

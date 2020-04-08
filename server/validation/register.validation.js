@@ -18,7 +18,11 @@ const registerValidation = Joi.object({
 
     password: Joi.string().min(5).required(),
 
-    role: Joi.string().required()
+    role: Joi.string().required(),
+
+    resetPasswordToken: Joi.string(),
+
+    resetPasswordExpires: Joi.any()
 })
 
 module.exports = registerValidation;

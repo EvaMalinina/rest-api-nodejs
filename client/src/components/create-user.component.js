@@ -50,7 +50,7 @@ export default class CreateUser extends Component {
   onSubmit(e) {
     e.preventDefault()
 
-    const driverObj = {
+    const userObj = {
       name: this.state.name,
       email: this.state.email,
       tel: this.state.tel,
@@ -58,7 +58,7 @@ export default class CreateUser extends Component {
       role: this.state.role
     };
 
-    axios.post(`http://localhost:4000/api/users/`, driverObj)
+    axios.post(`http://localhost:4000/api/users/`, userObj)
       // .then(res => console.log(res.data));
       .then(function (res) {
        console.log(res.data);

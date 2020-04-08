@@ -25,6 +25,12 @@ let userSchema = new Schema({
   },
   role: {
     type: String
+  },
+  resetPasswordToken: {
+    type: String
+  },
+  resetPasswordExpires: {
+    type: Date
   }
 }, {
     collection: 'users'

@@ -32,17 +32,20 @@ export default class renewPassword extends Component {
   async componentDidMount() {
     console.log(this.props.match.params.token);
     const {
-      match: {
-        params: { token },
-      },
-    } = this.props;
+        match: {
+          params: { token },
+        },
+      } = this.props;
     try {
-      const response = await axios.get('http://localhost:3000/api/resetpassword/auth', {
+      // const response = await axios.get('http://localhost:4000/api/resetpassword/auth/' + this.props.match.params.token
+      const response = await axios.get('http://localhost:4000/api/resetpassword/auth/', {
         params: {
           resetPasswordToken: token,
         },
-      });
-      // console.log(response);
+      }
+      );
+      console.log("response", response);
+ 
       if (response.data.message === 'password reset link a-ok') {
         this.setState({
           name: response.data.name,

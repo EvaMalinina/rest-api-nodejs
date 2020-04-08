@@ -2,7 +2,7 @@ UBER like service for freight trucks
 
 React MERN Stack App
 
-React MERN Stack CRUD app tutorial - Create frontend and backend with React, Node, Express, mongoDB and consume REST APIs with React Axios.
+Create frontend and backend with React, Node, Express, mongoDB and consume REST APIs with React Axios.
 
 This project was bootstrapped with Create React App.
 
