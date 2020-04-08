@@ -36,10 +36,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/api/users', userRoute);
-app.use('/api/driver', driverRoute);
+app.use('/api/auth', userRoute);
+app.use('/api/trucks', driverRoute);
 app.use('/api/shipper', shipperRoute);
-app.use('/api/load', loadRoute);
+app.use('/api/loads', loadRoute);
 app.use('/api/resetpassword', pswResetRoute);
 app.use('/api/user/image', imgRoute);
 

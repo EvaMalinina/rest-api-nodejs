@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let userSchema = new Schema({
-  name: {
+  username: {
     type: String,
     min: [2, 'Too short, min is 2 characters']
   },
@@ -10,12 +10,13 @@ let userSchema = new Schema({
     type: String,
     unique: true,
     lowercase: true,
-    required: 'Email is required',
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
+    required: false
   },
   tel: {
     type: String,
-    min: [6, 'Too short, min is 6 characters']
+    min: [6, 'Too short, min is 6 characters'],
+    required: false
   },
   password: {
     type: String,
@@ -27,10 +28,12 @@ let userSchema = new Schema({
     type: String
   },
   resetPasswordToken: {
-    type: String
+    type: String,
+    required: false
   },
   resetPasswordExpires: {
-    type: Date
+    type: Date,
+    required: false
   }
 }, {
     collection: 'users'

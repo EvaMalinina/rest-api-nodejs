@@ -1,3 +1,87 @@
+/**
+ * @api {patch} /api/trucks/:id/assign Assign driver to truck with specified id. 
+ * @apiName Register
+ * @apiGroup Truck
+ * 
+ * @apiHeader (headers) {String} authorization Authorization value.
+ * 
+ * @apiHeaderExample {json} authorization header example:
+ *     {
+ *       "Authorization": "JWT fnawilfmnaiwngainegnwegneiwngoiwe"
+ *     }
+ *
+ * @apiSuccess {String} status Operation status.
+ * 
+ * @apiSuccessExample {json} Success response example:
+ *     HTTP/1.1 200 OK
+ * {
+ *  status: "Truck assigned successfully"
+ * }
+ */
+/**
+ * @api {post} /api/trucks Create truck(only driver has access).
+ * @apiName Create truck
+ * @apiGroup Truck
+ * 
+ * @apiHeader (headers) {String} content-type Payload content type.
+ * @apiHeader (headers) {String} authorization Authorization value.
+ * 
+ * 
+ * @apiHeaderExample {json} content-type header example:
+ *     {
+ *       "Content-type": "application/json"
+ *     }
+ * @apiHeaderExample {json} authorization header example:
+ *     {
+ *       "Authorization": "JWT fnawilfmnaiwngainegnwegneiwngoiwe"
+ *     }
+ *
+ * @apiParam {String} type Truck type(SPRINTER, SMALL STRAIGHT, LARGE STRAIGHT).
+ * 
+ * @apiParamExample {json} Payload example:
+ *     {
+ *       "type": "SPRINTER"
+ *     }
+ * @apiSuccess {String} status Operation status.
+ * 
+ * @apiSuccessExample {json} Success response example:
+ *     HTTP/1.1 200 OK
+ * {
+ *  status: "Truck created successfully"
+ * }
+ */
+/**
+ * @api {get} /api/trucks Retreive list of trucks(for this driver).
+ * @apiName Get trucks
+ * @apiGroup Truck
+ * 
+ * @apiHeader (headers) {String} authorization Authorization value.
+ * 
+ * @apiHeaderExample {json} authorization header example:
+ *     {
+ *       "Authorization": "JWT fnawilfmnaiwngainegnwegneiwngoiwe"
+ *     }
+ *
+ * @apiSuccess {String} status Operation status.
+ * @apiSuccess {Object} status Operation status.
+ * 
+ * @apiSuccessExample {json} Success response example:
+ *     HTTP/1.1 200 OK
+ * {
+ *    "status": "Truck created successfully"
+ *    "trucks": [
+ *      {
+ *        "_id": "fbawfibaw",
+ *        "assigned_to": "",
+ *        "status": "OS",
+ *        "created_by": "fbawfibaw",
+ *        "type": "SPRINTER",
+ *        "...": "..."
+ *    }
+ *  ]
+ * }
+ */
+
 require('dotenv').config();
 
 const express = require('express'),
@@ -15,9 +99,10 @@ let truckSchema = require('../models/Truck');
 let loadSchema = require('../models/Load');
 
 // CREATE truck
-router.post('/:id', async (req, res) => {
+router.post('/', withAuth, async (req, res) => {
+  const accessToken = req.header('authorization');
   const truck = new truckSchema({
-    created_by: req.body.created_by,
+    created_by: accessToken,
     assigned_to: req.body.assigned_to,
     status: req.body.status,
     type: req.body.type
@@ -26,15 +111,16 @@ router.post('/:id', async (req, res) => {
   try {
     const value = await truckValidation.validateAsync(truck._doc);
     const savedTruck = await truck.save();
-    res.send({truck});
-
+    res.status(200).send({ status: "Truck created successfully",
+                          truck
+                        });
   } catch(err) {
     res.status(500).send(err);
   }
 });
 
 // READ all trucks
-router.get('/', (req, res) => {
+router.get('/all', (req, res) => {
   truckSchema.find((error, data) => {
     if (error) {
       return next(error)
@@ -45,19 +131,21 @@ router.get('/', (req, res) => {
 })
 
 // READ single driver trucks
-router.get('/:id', (req, res, next) => {
-  truckSchema.find({ created_by: req.params.id }, (error, data) => {
+router.get('/', withAuth, (req, res, next) => {
+  const accessToken = req.header('authorization');
+  let truck = truckSchema.find({ created_by: accessToken }, (error, data) => {
+    console.log(truck._id);
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      res.json({ status: "Truck created successfully", trucks: data})
     }
   })
 });
 
 
 // UPDATE driver assigned truck
-router.put('/assignment/:id', (req, res, next) => {
+router.put('/:id/assign', withAuth, (req, res, next) => {
 
   truckSchema.findById(req.params.id, (err, truckSchema) => {
     
@@ -69,7 +157,7 @@ router.put('/assignment/:id', (req, res, next) => {
 
     try {
       const savedTruck = truckSchema.save();
-      res.json('Truck assign status updated!');
+      res.json({ status: "Truck assigned successfully"});
 
     } catch(err) {
       res.status(500).send(err);
@@ -78,7 +166,7 @@ router.put('/assignment/:id', (req, res, next) => {
 })
 
 // GET all not assigned to driver trucks 
-router.get('/:id/trucks', (req, res, next) => {
+router.get('/:id/notassign', (req, res, next) => {
   truckSchema.find({ created_by: req.params.id, assigned_to: "none" }, (error, data) => {
     if (error) {
       return next(error)
@@ -129,37 +217,5 @@ router.delete('/bin/:id', (req, res, next) => {
     }
   })
 });
-
-// READ assigned to driver load info
-router.get('/:id/load', (req, res, next) => {
-  loadSchema.find({ assigned_to: req.params.id }, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-});
-
-// change status of assigned load
-router.put('/load/mutation/:id', (req, res, next) => {
-  loadSchema.findById(req.params.id,  async (err, loadSchema) => {
-    
-    if (!loadSchema) {
-      res.status(404).send("Load is not found.");
-    }
-
-    loadSchema.state = req.body.state;
-
-    try {
-      const value = await loadValidation.validateAsync(loadSchema._doc);
-      const savedLoad = loadSchema.save();
-      res.json('Load state updated!');
-
-    } catch(err) {
-      res.status(500).send(err);
-    }
-  })
-})
 
 module.exports = router;

@@ -5,7 +5,6 @@ import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-// import history from './history';
 import DefaultImg from '../default-img/driver-default-img.png';
 import {
   Switch,
@@ -61,13 +60,14 @@ export default class driverProfile extends Component {
     e.preventDefault()
     const id = localStorage.getItem('id');
     const truckObj = {
+      token: localStorage.getItem('token'),
       created_by: id,
       assigned_to: this.state.assigned_to,
       status: 'IS',
       type: this.state.truckType
     };
 
-    axios.post('http://localhost:4000/api/driver/' + id, truckObj)
+    axios.post('http://localhost:4000/api/trucks/', truckObj)
       .then(function (res) {
         console.log(res.data.truck); 
      })
@@ -151,7 +151,7 @@ export default class driverProfile extends Component {
           }
         })
         .catch((err) => {
-          console.log("Error while uploading image using multer.");
+          console.log("Error while uploading image using multer.", err);
           this.setDefaultImg("multer");
         })
     }

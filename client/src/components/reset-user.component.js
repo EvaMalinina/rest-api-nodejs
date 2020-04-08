@@ -2,12 +2,6 @@ import React, {Component} from "react";
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-// import PropTypes from "prop-types";
-// import history from './history';
-// import {
-//   Switch,
-//   Link
-// } from "react-router-dom";
 
 class resetPassword extends Component {
 
@@ -70,32 +64,6 @@ class resetPassword extends Component {
       }
     }
   };
-
-  // onChangeUserEmail(e) {
-  //   this.setState({email: e.target.value})
-  // }
-
-  // onSubmit(e) {
-  //   e.preventDefault()
-
-  //   const userObj = {
-  //     token: localStorage.getItem('token'),
-  //     email: this.state.email
-  //   };
-
-  //   axios.put('http://localhost:4000/api/resetpassword', userObj)
-  //     .then(function (res) {
-  //       // localStorage.setItem('token', res.data.accessToken);
-  //       // localStorage.setItem('id', res.data.user._id);
-  //     })
-  //     .catch(function (error) {
-  //       alert("There is no user with such email", error);
-  //     })
-
-  //   this.setState({ email: '' })
-
-  //   console.log(`User successfully reset password!`);
-  // }
  
   render() {
     const {
@@ -105,15 +73,12 @@ class resetPassword extends Component {
     return (
     <div className="form-wrapper">
       <h3>Please enter the email what you have used for registration.</h3>
-      {/* <Form onSubmit={ this.onSubmit }> */}
       <Form onSubmit={this.sendEmail}>
         <Form.Group controlId="reset-email">
           <Form.Label>Your email</Form.Label>
           <Form.Control type="email" 
                         controlid="email"
-                        // value={this.state.email} 
                         value={ email } 
-                        // onChange={this.onChangeUserEmail}
                         onChange={this.handleChange('email')}
                         />
         </Form.Group>

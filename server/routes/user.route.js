@@ -1,3 +1,67 @@
+/**
+ * @api {post} /api/auth/login Login endpoint.
+ * @apiName Login
+ * @apiGroup Auth
+ * 
+ * @apiHeader (headers) {String} content-type Payload content type.
+ * 
+ * @apiHeaderExample {json} Content-type header example:
+ *     {
+ *       "Content-type": "application/json"
+ *     }
+ * @apiParam {String} username Username
+ * @apiParam {String} password Password
+ * 
+ * @apiParamExample {json} Payload example:
+ *     {
+ *        username: "Kyrylo",
+ *        password: "test1234"
+ *     }
+ * 
+ * @apiSuccess {String} status Operation status.
+ * @apiSuccess {String} token JWT token.
+ * 
+ * @apiSuccessExample {json} Success response example:
+ *     HTTP/1.1 200 OK
+ * {
+ *  status: "User authenticated successfully",
+ *  token: "fnawilfmnaiwngainegnwegneiwngoiwe"
+ * }
+ * 
+ */
+
+/**
+ * @api {post} /api/auth/register Register new user.
+ * @apiName Register
+ * @apiGroup Auth
+ * 
+ * @apiHeader (headers) {String} content-type Payload content type.
+ * 
+ * @apiHeaderExample {json} Content-type header example:
+ *     {
+ *       "Content-type": "application/json"
+ *     }
+ *
+ * 
+ * @apiParam {String} username Username
+ * @apiParam {String} password Password
+ * @apiParam {String} role User type (driver or shipper), shoudnt be case sensitive.
+ * 
+ * @apiParamExample {json} Payload example:
+ *     {
+ *        username: "Kyrylo",
+ *        password: "test1234",
+ *        role: "driver"
+ *     }
+ * @apiSuccess {String} status Operation status.
+ * 
+ * @apiSuccessExample {json} Success response example:
+ *     HTTP/1.1 200 OK
+ * {
+ *  status: "User registered successfully"
+ * }
+ */
+
 require('dotenv').config();
 
 const express = require('express'),
@@ -16,14 +80,14 @@ const express = require('express'),
 let userSchema = require('../models/User');
   
 // CREATE user
-router.post('/', async (req, res, next) => {
+router.post('/register', async (req, res, next) => {
       
     // to hash pass
     const salt = await bcrypt.genSalt(9);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new userSchema({
-      name: req.body.name,
+      username: req.body.username,
       email: req.body.email,
       tel: req.body.tel,
       password: hashedPassword,
@@ -34,7 +98,7 @@ router.post('/', async (req, res, next) => {
     try {
       const value = await registerValidation.validateAsync(user._doc);
       const savedUser = user.save();
-      res.send("User registered");
+      res.send({ status: "User registered successfully" });
 
     }catch(err){
       res.status(500).send(err);
@@ -45,13 +109,13 @@ router.post('/', async (req, res, next) => {
 router.post('/login', async (req, res) => {
   // validation of written data by user
   const userValid = {
-    email: req.body.email,
+    username: req.body.username,
     password: req.body.password
   };
   const value = await loginValidation.validateAsync(userValid._doc);
   
   // check if there is such user in db
-  const user = await userSchema.findOne({email: req.body.email});
+  const user = await userSchema.findOne({username: req.body.username});
   if ( user == null ) {
     return res.status(400).send("Cannot find a user.")
   }
@@ -59,7 +123,8 @@ router.post('/login', async (req, res) => {
     if(await bcrypt.compare(req.body.password, user.password)) {
       // token
       const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET);
-      res.header('authorization', accessToken).json({ accessToken, user })
+      res.header('authorization', accessToken)
+          .json({ status: "User authenticated successfully", accessToken, user })
     } else {
       res.send("Credentials are not correct.")
     }
@@ -98,7 +163,6 @@ router.put('/:id', withAuth, (req, res, next) => {
     if (!userSchema) {
       res.status(404).send("There is no user with such id.");
     }
-
     try {
       if (await bcrypt.compare(req.body.oldPassword, userSchema.password)) {
 
@@ -108,13 +172,9 @@ router.put('/:id', withAuth, (req, res, next) => {
         userSchema.password = hashedPassword;
         userSchema.save();
         res.json('userSchema updated!');
-        // token
-        // const accessToken = jwt.sign({ _id: userSchema._id }, process.env.ACCESS_TOKEN_SECRET);
-        // res.header('authorization', accessToken).json({ accessToken, user })
       } else {
         res.send("Old password is not correct.")
       }
-
     } catch(err) {
       res.status(500).send(err);
     }

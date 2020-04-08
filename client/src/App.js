@@ -44,70 +44,68 @@ class App extends Component {
     this.setState({isLoggedIn: false});
   }
 
-  updateData = (value) => {
+  updateData = (value) =>  {
     this.setState({ isLoggedIn: value })
   }
   render () {
     // const Token = localStorage.getItem('token', token);
     return (
       <Router>
-        {/* <LoginContextProvider> */}
-          <div className="App">
-            <header className="App-header">
-              <Navbar bg="dark" variant="dark">
-                <Container>
+        <div className="App">
+          <header className="App-header">
+            <Navbar bg="dark" variant="dark">
+              <Container>
 
-                  <Navbar.Brand>
+                <Navbar.Brand>
+                  <Link to={"/"} className="nav-link">
+                    GO service for goods transportation
+                  </Link>
+                </Navbar.Brand>
+
+                <Nav className="justify-content-end">
+                  <Nav>
                     <Link to={"/"} className="nav-link">
-                      GO service for goods transportation
+                      Create Account
                     </Link>
-                  </Navbar.Brand>
-
-                  <Nav className="justify-content-end">
-                    <Nav>
-                      <Link to={"/"} className="nav-link">
-                        Create Account
-                      </Link>
-                    </Nav>
-                    { this.state.isLoggedIn
-                      ? (
-                        <Nav >
-                          <Link to={"/login"} className="nav-link"  onClick={this.handleLogoutClick}>
-                            Sign out
-                          </Link>
-                        </Nav>
-                      ) : (
-                        <Nav>
-                          <Link to={"/login"} className="nav-link" onClick={this.handleLoginClick}>
-                            Sign in
-                          </Link>
-                        </Nav>
-                    )}
                   </Nav>
-                
-                </Container>
-              </Navbar>
-            </header>
+                  { this.state.isLoggedIn
+                    ? (
+                      <Nav >
+                        <Link to={"/login"} className="nav-link"  onClick={this.handleLogoutClick}>
+                          Sign out
+                        </Link>
+                      </Nav>
+                    ) : (
+                      <Nav>
+                        <Link to={"/login"} className="nav-link" onClick={this.handleLoginClick}>
+                          Sign in
+                        </Link>
+                      </Nav>
+                  )}
+                </Nav>
+              
+              </Container>
+            </Navbar>
+          </header>
 
-            <Container>
-              <Row>
-                <Col md={12}>
-                  <div className="wrapper">
-                    <Switch>
-                      <Route exact path='/' component={CreateUser} />
-                      <Route path="/users" component={CreateUser} />
-                      <Route exact path="/login" render={props => <LoginUser updateData={this.updateData} {...props}/>} />
-                      <Route path="/driver" component={driverProfile} />
-                      <Route path="/shipper" component={shipperProfile} />
-                      <Route path="/reset" component={resetPassword} />
-                      <Route path="/api/resetpassword/auth/:token" component={renewPassword} />
-                    </Switch>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-          </div>
-        {/* </LoginContextProvider> */}
+          <Container>
+            <Row>
+              <Col md={12}>
+                <div className="wrapper">
+                  <Switch>
+                    <Route exact path='/' component={CreateUser} />
+                    <Route path="/users" component={CreateUser} />
+                    <Route exact path="/login" render={props => <LoginUser updateData={this.updateData} {...props}/>} />
+                    <Route path="/driver" component={driverProfile} />
+                    <Route path="/shipper" component={shipperProfile} />
+                    <Route path="/reset" component={resetPassword} />
+                    <Route path="/api/resetpassword/auth/:token" component={renewPassword} />
+                  </Switch>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </Router>);
   }
 }

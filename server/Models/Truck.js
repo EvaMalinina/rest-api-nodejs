@@ -3,13 +3,16 @@ const Schema = mongoose.Schema;
 
 let truckSchema = new Schema({
   created_by: {
-    type: String
+    type: String,
+    required: false
   },
   assigned_to: {
-    type: String
+    type: String,
+    required: false
   },
   status: {
-    type: String 
+    type: String ,
+    required: false
   },
   type: {
     type: String

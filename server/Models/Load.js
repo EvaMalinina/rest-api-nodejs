@@ -3,20 +3,25 @@ const Schema = mongoose.Schema;
 
 let loadSchema = new Schema({
   created_by: {
-    type: String
+    type: String,
+    required: false
   },
   logs: {
     type: Map,
-    of: String
+    of: String,
+    required: false
   },
   assigned_to: {
-    type:  String
+    type:  String,
+    required: false
   },
   status: {
-    type: String
+    type: String,
+    required: false
   },
   state: {
-    type: String
+    type: String,
+    required: false
   },
   dimensions: {
     type: Object,
