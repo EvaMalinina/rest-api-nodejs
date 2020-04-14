@@ -4,26 +4,27 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import PropTypes from "prop-types";
 // import history from './history';
+// import { LoginContext } from '../contexts/LoginContext';
 
 class LoginUser extends Component {
 
   constructor(props) {
     super(props)
     // Setting up functions
-    this.onChangeUserName = this.onChangeUserName.bind(this);
+    this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
     this.onChangeUserPassword = this.onChangeUserPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     // Setting up state
     this.state = {
-      username: '',
+      email: '',
       password: '',
       isLoggedIn: true
     }
   }
 
-  onChangeUserName(e) {
-    this.setState({username: e.target.value})
+  onChangeUserEmail(e) {
+    this.setState({email: e.target.value})
   }
 
   onChangeUserPassword(e) {
@@ -33,27 +34,30 @@ class LoginUser extends Component {
   onSubmit(e) {
     e.preventDefault()
     const userObj = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
 
-    axios.post('http://localhost:4000/api/auth/login', userObj)
+    axios.post('http://localhost:4000/api/users/login', userObj)
       .then(function (res) {
         localStorage.setItem('token', res.data.accessToken);
         localStorage.setItem('id', res.data.user._id);
-        localStorage.setItem('name', res.data.user.username);
+        localStorage.setItem('name', res.data.user.name);
         localStorage.setItem('password', res.data.user.password);
         localStorage.setItem('role', res.data.user.role);
         setTimeout(changeLocation(res.data.user.role), 1000);
+        
+        // history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
+        // this.context.router.history.push(res.data.user.role === 'Driver' ? '/driver' : '/shipper');
       })
       .catch(function (error) {
         alert("There is problem with login", error);
       })
 
-    this.setState({username: '', password: '', isLoggedIn: true})
+    this.setState({email: '', password: '', isLoggedIn: true})
 
     console.log(`User successfully logged!`);
-    console.log(`Email: ${this.state.username}`);
+    console.log(`Email: ${this.state.email}`);
     console.log(`Password: ${this.state.password}`);
     console.log(`logged: ${this.state.isLoggedIn}`);
 
@@ -65,12 +69,16 @@ class LoginUser extends Component {
  
   render() {
     return (
+      // <LoginContext.Consumer>{(LoginContext) => {
+        // const { isLoggedIn, toggleLogin } = LoginContext;
+
+        // return(
           <div className="form-wrapper">
             <Form onSubmit={ this.onSubmit }>
       
-              <Form.Group controlId="Name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="name" value={this.state.username} onChange={this.onChangeUserName}/>
+              <Form.Group controlId="Email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="email" value={this.state.email} onChange={this.onChangeUserEmail}/>
               </Form.Group>
       
               <Form.Group controlId="Password">
@@ -83,14 +91,16 @@ class LoginUser extends Component {
               </Button>
             </Form>
           </div>
+        // )
+      // }}
+      // </LoginContext.Consumer>
     );
   }
 }
 
 LoginUser.propTypes = {
-  isLoggedIn: PropTypes.string,
   history: PropTypes.object.isRequired,
-  updateData: PropTypes.func
+  isLoggedIn: PropTypes.string
 };
 
 export default LoginUser;

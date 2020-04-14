@@ -4,17 +4,17 @@ const Joi = require('@hapi/joi');
 const loadValidation = Joi.object({
     _id: Joi.any(),
     created_by: Joi.string()
-      .optional(),
+      .required(),
 
     logs: Joi.object()
-      .optional(),
+      .required(),
 
     assigned_to: Joi.string()
-      .optional(),
+      .required(),
 
     status: Joi.string()
       .valid('NEW', 'POSTED', 'ASSIGNED', 'SHIPPED')
-      .optional(),
+      .required(),
 
     state: Joi.string()
       .valid( '',
@@ -22,7 +22,7 @@ const loadValidation = Joi.object({
               'Arrived to Pick Up', 
               'En route to delivery', 
               'Arrived to delivery')
-      .optional(),
+      .required(),
 
     dimensions: Joi.object().min(3)
       .required(),
@@ -30,7 +30,7 @@ const loadValidation = Joi.object({
     payload: Joi.number()
       .required(),
 
-    __v: Joi.number().optional(),
+    __v: Joi.number()
 })
 
 module.exports = loadValidation;

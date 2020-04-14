@@ -4,8 +4,9 @@ const Joi = require('@hapi/joi');
 const loginValidation = Joi.object({
   _id: Joi.any(),
 
-  username: Joi.string().required(),
-  
+  email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+
   password: Joi.string().required()
 })
 

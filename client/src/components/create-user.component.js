@@ -19,7 +19,7 @@ export default class CreateUser extends Component {
 
     // Setting up state
     this.state = {
-      username: '',
+      name: '',
       email: '',
       tel: '',
       password: '',
@@ -28,7 +28,7 @@ export default class CreateUser extends Component {
   }
 
   onChangeDriverName(e) {
-    this.setState({username: e.target.value})
+    this.setState({name: e.target.value})
   }
 
   onChangeDriverEmail(e) {
@@ -51,14 +51,14 @@ export default class CreateUser extends Component {
     e.preventDefault()
 
     const userObj = {
-      username: this.state.username,
+      name: this.state.name,
       email: this.state.email,
       tel: this.state.tel,
       password: this.state.password,
       role: this.state.role
     };
 
-    axios.post(`http://localhost:4000/api/auth/register`, userObj)
+    axios.post(`http://localhost:4000/api/users/`, userObj)
       // .then(res => console.log(res.data));
       .then(function (res) {
        console.log(res.data);
@@ -67,10 +67,10 @@ export default class CreateUser extends Component {
        console.log("There is a problem with registration", error);
      })
      
-    this.setState({username: '', email: '', tel: '', password: '', role: ''})
+    this.setState({name: '', email: '', tel: '', password: '', role: ''})
 
     console.log(`User successfully created!`);
-    console.log(`username: ${this.state.username}`);
+    console.log(`Name: ${this.state.name}`);
     console.log(`Email: ${this.state.email}`);
     console.log(`Tel: ${this.state.tel}`);
     console.log(`Password: ${this.state.password}`);
@@ -86,7 +86,7 @@ export default class CreateUser extends Component {
         <Form onSubmit={ this.onSubmit }>
           <Form.Group controlId="Name">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" value={this.state.username} onChange={this.onChangeDriverName} />
+            <Form.Control type="text" value={this.state.name} onChange={this.onChangeDriverName} />
           </Form.Group>
 
           <Form.Group controlId="Email">

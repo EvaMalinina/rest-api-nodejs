@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
+// import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import DefaultImg from '../default-img/shipper-default-img.png';
@@ -58,11 +59,13 @@ export default class shipperProfile extends Component {
         .then((data) => {
           if( data.data.success) {
             alert("Image has been successfully uploaded using multer ");
+            // let newImg = data.data.document.imageData;
+            // this.setDefaultImg("multer", newImg);
             this.setDefaultImg("multer");
           }
         })
         .catch((err) => {
-          alert("Error while uploading image using multer.", err);
+          alert("Error while uploading image using multer.");
           this.setDefaultImg("multer");
         })
     }

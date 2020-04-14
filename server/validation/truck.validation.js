@@ -5,14 +5,14 @@ const truckValidation = Joi.object({
     _id: Joi.any(),
     
     created_by: Joi.string()
-      .optional(),
+      .required(),
 
     assigned_to: Joi.string()
-    .optional(),
+      .required(),
 
     status: Joi.string()
       .valid('IS', 'OL')
-      .optional(),
+      .required(),
 
     type: Joi.string()
       .valid('Sprinter', 'Small Straight', 'Large Straight')
